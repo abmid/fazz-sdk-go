@@ -8,6 +8,7 @@ package disbursement
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/abmid/fazz-sdk-go"
 	"github.com/abmid/fazz-sdk-go/request"
@@ -19,7 +20,8 @@ type Client struct {
 }
 
 const (
-	pathCreate = "/v4/disbursements"
+	pathDisbursement = "/v4/disbursements"
+	pathShow         = pathDisbursement + "/:id"
 )
 
 // BankAccount return response from Create a Disbursement API
@@ -30,7 +32,23 @@ func (c *Client) Create(ctx context.Context, payload fazz.DisbursementCreatePayl
 		Data Disbursement `json:"data"`
 	}{}
 
-	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathCreate, nil, payload, nil, &res); err != nil {
+	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathDisbursement, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}
+
+// Disbursement return response from Get a Disbursement API
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-disbursement
+func (c *Client) Disbursement(ctx context.Context, disbursementId string) (*Disbursement, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathShow, ":id", disbursementId)
+	res := struct {
+		Data Disbursement `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, url, nil, nil, nil, &res); err != nil {
 		return nil, err
 	}
 

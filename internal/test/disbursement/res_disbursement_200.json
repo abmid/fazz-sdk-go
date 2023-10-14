@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "contract_1a2b3c4d5e6f7890",
+    "type": "disbursement",
+    "attributes": {
+      "referenceId": "order_id_123456",
+      "description": "Your delivery payout",
+      "amount": "10000.0",
+      "status": "processing",
+      "createdAt": "2020-03-27T23:59:59+07:00",
+      "fees": "200.0",
+      "disbursementMethod": {
+        "type": "bank_transfer",
+        "bankAccountNo": "0102030405",
+        "bankShortCode": "BRI",
+        "bankName": "Bank Rakyat Indonesia",
+        "bankAccountHolderName": "John Doe",
+        "serverBankAccountHolderName": "J Doe"
+      }
+    }
+  }
+}

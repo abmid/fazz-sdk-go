@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/abmid/fazz-sdk-go"
@@ -56,7 +57,7 @@ func TestClient_Create(t *testing.T) {
 			},
 			prepare: func(m helper.Mocks, args args) {
 				m.Api.EXPECT().
-					Req(args.ctx, http.MethodPost, fazz.SandboxURL+pathCreate, nil, args.payload, nil, gomock.Any()).
+					Req(args.ctx, http.MethodPost, fazz.SandboxURL+pathDisbursement, nil, args.payload, nil, gomock.Any()).
 					DoAndReturn(func(ctx context.Context, method string, url string, param any, body any, header map[string]string, response any) *fazz.Error {
 						if err := json.Unmarshal(testWrap.ResJSONByte(pathTest+"res_create_201.json"), response); err != nil {
 							panic(err)
@@ -93,7 +94,7 @@ func TestClient_Create(t *testing.T) {
 			},
 			prepare: func(m helper.Mocks, args args) {
 				m.Api.EXPECT().
-					Req(args.ctx, http.MethodPost, fazz.SandboxURL+pathCreate, nil, args.payload, nil, gomock.Any()).
+					Req(args.ctx, http.MethodPost, fazz.SandboxURL+pathDisbursement, nil, args.payload, nil, gomock.Any()).
 					Return(fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")))
 			},
 			wantErr: fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")),
@@ -123,6 +124,96 @@ func TestClient_Create(t *testing.T) {
 			}
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("Client.Create() gotErr = %v, wantErr %v", gotErr, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestClient_Disbursement(t *testing.T) {
+	testWrap := helper.NewTestWrapper(t)
+	defer testWrap.Ctrl.Finish()
+
+	type args struct {
+		ctx            context.Context
+		disbursementId string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		prepare func(m helper.Mocks, args args)
+		wantRes *Disbursement
+		wantErr *fazz.Error
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx:            context.Background(),
+				disbursementId: "contract_1a2b3c4d5e6f7890",
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathShow, ":id", args.disbursementId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodGet, url, nil, nil, nil, gomock.Any()).
+					DoAndReturn(func(ctx context.Context, method string, url string, param any, body any, header map[string]string, response any) *fazz.Error {
+						if err := json.Unmarshal(testWrap.ResJSONByte(pathTest+"res_disbursement_200.json"), response); err != nil {
+							panic(err)
+						}
+
+						return nil
+					})
+			},
+			wantRes: &Disbursement{
+				ID:   "contract_1a2b3c4d5e6f7890",
+				Type: "disbursement",
+				Attributes: DisbursementAttributes{
+					ReferenceID: "order_id_123456",
+					Description: "Your delivery payout",
+					Amount:      "10000.0",
+					Status:      "processing",
+					CreatedAt:   helper.StringToTime("2020-03-27T23:59:59+07:00"),
+					Fees:        "200.0",
+					DisbursementMethod: DisbursementMethod{
+						Type:                        "bank_transfer",
+						BankAccountNo:               "0102030405",
+						BankShortCode:               "BRI",
+						BankName:                    "Bank Rakyat Indonesia",
+						BankAccountHolderName:       "John Doe",
+						ServerBankAccountHolderName: "J Doe",
+					},
+				},
+			},
+		},
+		{
+			name: "Invalid requests",
+			args: args{
+				ctx: context.Background(),
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathShow, ":id", args.disbursementId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodGet, url, nil, nil, nil, gomock.Any()).
+					Return(fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")))
+			},
+			wantErr: fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			apiMock := mock_request.NewMockApi(testWrap.Ctrl)
+
+			c := &Client{
+				Api:     apiMock,
+				FazzURL: fazz.SandboxURL,
+			}
+
+			tt.prepare(helper.Mocks{Api: apiMock}, tt.args)
+
+			gotRes, gotErr := c.Disbursement(tt.args.ctx, tt.args.disbursementId)
+			if !reflect.DeepEqual(gotRes, tt.wantRes) {
+				t.Errorf("Client.Disbursement() gotRes = %v, wantRes %v", gotRes, tt.wantRes)
+			}
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("Client.Disbursement() gotErr = %v, wantErr %v", gotErr, tt.wantErr)
 			}
 		})
 	}
