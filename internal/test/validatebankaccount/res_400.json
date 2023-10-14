@@ -1,0 +1,9 @@
+{
+  "errors": [
+      {
+          "code": "005",
+          "title": "Invalid parameter",
+          "detail": "account_no must all be numbers"
+      }
+  ]
+}
