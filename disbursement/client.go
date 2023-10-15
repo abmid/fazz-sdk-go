@@ -54,3 +54,19 @@ func (c *Client) Disbursement(ctx context.Context, disbursementId string) (*Disb
 
 	return &res.Data, nil
 }
+
+// Disbursements return response from Get a List of Disbursement API.
+// For pagination, sorting & filtering you can use FazzParams
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-disbursements
+func (c *Client) Disbursements(ctx context.Context, params *fazz.FazzParams) ([]Disbursement, *fazz.Error) {
+	res := struct {
+		Data []Disbursement `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, c.FazzURL+pathDisbursement, params, nil, nil, &res); err != nil {
+		return []Disbursement{}, err
+	}
+
+	return res.Data, nil
+}

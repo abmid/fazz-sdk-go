@@ -32,5 +32,7 @@ type DisbursementMethod struct {
 	BankShortCode               string `json:"bankShortCode"`
 	BankName                    string `json:"bankName"`
 	BankAccountHolderName       string `json:"bankAccountHolderName"`
+	BankReferenceNumber         string `json:"bankReferenceNumber"`
 	ServerBankAccountHolderName string `json:"serverBankAccountHolderName"`
+	FailureReason               string `json:"failureReason"`
 }
