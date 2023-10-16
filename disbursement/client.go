@@ -22,6 +22,7 @@ type Client struct {
 const (
 	pathDisbursement = "/v4/disbursements"
 	pathShow         = pathDisbursement + "/:id"
+	pathUpdate       = pathDisbursement + "/:id/tasks"
 )
 
 // BankAccount return response from Create a Disbursement API
@@ -69,4 +70,20 @@ func (c *Client) Disbursements(ctx context.Context, params *fazz.FazzParams) ([]
 	}
 
 	return res.Data, nil
+}
+
+// Update return response from Update a Disbursement API.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/update-disbursement
+func (c *Client) Update(ctx context.Context, disbursementId string, payload fazz.DisbursementUpdatePayload) (*DisbursementUpdate, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathUpdate, ":id", disbursementId)
+	res := struct {
+		Data DisbursementUpdate `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodPost, url, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
 }

@@ -36,3 +36,16 @@ type DisbursementMethod struct {
 	ServerBankAccountHolderName string `json:"serverBankAccountHolderName"`
 	FailureReason               string `json:"failureReason"`
 }
+
+// DisbursementUpdate represent response from Update a Disbursement API.
+type DisbursementUpdate struct {
+	Type       string                       `json:"type"`
+	Attributes DisbursementUpdateAttributes `json:"attributes"`
+}
+
+// DisbursementUpdateAttributes is part of DisbursementUpdate.
+type DisbursementUpdateAttributes struct {
+	TargetID   string `json:"targetId"`
+	TargetType string `json:"targetType"`
+	Action     string `json:"action"`
+}
