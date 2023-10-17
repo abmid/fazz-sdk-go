@@ -124,3 +124,19 @@ func (c *Client) ListPaymentsQRIS(ctx context.Context, paymentMethodId string, p
 
 	return res.Data, nil
 }
+
+// SimulatePaymentVA return response from Create a mock payment for a payment method API (virtual_bank_accounts).
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/create-mock-payment-for-payment-method
+func (c *Client) SimulatePaymentVA(ctx context.Context, paymentMethodId string, payload fazz.PaymentMethodSimulatePayload) (*SimulatePaymentVA, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathSimulatePaymentVA, ":paymentMethodId", paymentMethodId)
+	res := struct {
+		Data SimulatePaymentVA `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodPost, url, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}

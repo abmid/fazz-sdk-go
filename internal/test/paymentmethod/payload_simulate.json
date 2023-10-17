@@ -1,0 +1,10 @@
+{
+  "data": {
+    "attributes": {
+      "action": "receive_payment",
+      "options": {
+        "amount": 99000
+      }
+    }
+  }
+}

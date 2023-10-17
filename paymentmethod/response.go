@@ -108,13 +108,16 @@ type SimulatePaymentVA struct {
 
 // SimulatePaymentVAAttributes is part of SimulatePaymentVA
 type SimulatePaymentVAAttributes struct {
-	TargetId    string `json:"targetId"`
-	TargetType  string `json:"targetType"`
-	ReferenceId string `json:"referenceId"`
-	Action      string `json:"action"`
-	Options     struct {
-		Amount string `json:"amount"`
-	} `json:"options"`
+	TargetId    string                 `json:"targetId"`
+	TargetType  string                 `json:"targetType"`
+	ReferenceId string                 `json:"referenceId"`
+	Action      string                 `json:"action"`
+	Options     SimulatePaymentOptions `json:"options"`
+}
+
+// SimulatePaymentOptions is part of SimulatePaymentVAAttributes & SimulatePaymentQRISAttributes
+type SimulatePaymentOptions struct {
+	Amount string `json:"amount"`
 }
 
 // SimulatePaymentVA represents response from Create a mock payment for a payment method QRIS
@@ -125,10 +128,8 @@ type SimulatePaymentQRIS struct {
 
 // SimulatePaymentQRISAttributes is part of SimulatePaymentQRIS
 type SimulatePaymentQRISAttributes struct {
-	TargetId   string `json:"targetId"`
-	TargetType string `json:"targetType"`
-	Action     string `json:"action"`
-	Options    struct {
-		Amount string `json:"amount"`
-	} `json:"options"`
+	TargetId   string                 `json:"targetId"`
+	TargetType string                 `json:"targetType"`
+	Action     string                 `json:"action"`
+	Options    SimulatePaymentOptions `json:"options"`
 }

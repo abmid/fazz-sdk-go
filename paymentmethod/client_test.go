@@ -561,3 +561,99 @@ func TestClient_ListPaymentsQRIS(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_SimulatePaymentVA(t *testing.T) {
+	testWrap := helper.NewTestWrapper(t)
+	defer testWrap.Ctrl.Finish()
+
+	type args struct {
+		ctx             context.Context
+		paymentMethodId string
+		payload         fazz.PaymentMethodSimulatePayload
+	}
+	tests := []struct {
+		name    string
+		args    args
+		prepare func(m helper.Mocks, args args)
+		wantRes *SimulatePaymentVA
+		wantErr *fazz.Error
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx:             context.Background(),
+				paymentMethodId: "va_3148fe52bb6d17e4d90a6d0e55d08fb6",
+				payload: fazz.PaymentMethodSimulatePayload{
+					Action: "receive_payment",
+					Options: fazz.PaymentMethodOptions{
+						Amount: 99000,
+					},
+				},
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathSimulatePaymentVA, ":paymentMethodId", args.paymentMethodId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodPost, url, nil, args.payload, nil, gomock.Any()).
+					DoAndReturn(func(ctx context.Context, method string, url string, param any, body any, header map[string]string, response any) *fazz.Error {
+						if err := json.Unmarshal(testWrap.ResJSONByte(pathTest+"res_mock_payment_va_201.json"), response); err != nil {
+							panic(err)
+						}
+
+						return nil
+					})
+			},
+			wantRes: &SimulatePaymentVA{
+				Type: "task",
+				Attributes: SimulatePaymentVAAttributes{
+					TargetId:    "va_3148fe52bb6d17e4d90a6d0e55d08fb6",
+					TargetType:  "virtual_bank_account",
+					ReferenceId: "external_id_55c17f9ab4",
+					Action:      "receive_payment",
+					Options: SimulatePaymentOptions{
+						Amount: "99000",
+					},
+				},
+			},
+		},
+		{
+			name: "Invalid requests",
+			args: args{
+				ctx: context.Background(),
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathSimulatePaymentVA, ":paymentMethodId", args.paymentMethodId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodPost, url, nil, args.payload, nil, gomock.Any()).
+					Return(fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")))
+			},
+			wantErr: fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			apiMock := mock_request.NewMockApi(testWrap.Ctrl)
+
+			c := &Client{
+				Api:     apiMock,
+				FazzURL: fazz.SandboxURL,
+			}
+
+			tt.prepare(helper.Mocks{Api: apiMock}, tt.args)
+
+			if tt.wantRes != nil {
+				payload := fazz.PaymentMethodSimulatePayload{}
+				if !testWrap.DeepEqualPayload(pathTest+"payload_simulate.json", &payload, &tt.args.payload) {
+					t.Errorf("Client.SimulatePaymentVA() gotPayload = %v, wantPayload %v", payload, tt.args.payload)
+				}
+			}
+
+			gotRes, gotErr := c.SimulatePaymentVA(tt.args.ctx, tt.args.paymentMethodId, tt.args.payload)
+			if !reflect.DeepEqual(gotRes, tt.wantRes) {
+				t.Errorf("Client.SimulatePaymentVA() gotRes = %v, wantRes %v", gotRes, tt.wantRes)
+			}
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("Client.SimulatePaymentVA() gotErr = %v, wantErr %v", gotErr, tt.wantErr)
+			}
+		})
+	}
+}
