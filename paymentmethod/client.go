@@ -8,6 +8,7 @@ package paymentmethod
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/abmid/fazz-sdk-go"
 	"github.com/abmid/fazz-sdk-go/request"
@@ -54,6 +55,22 @@ func (c *Client) CreateQRIS(ctx context.Context, payload fazz.PaymentMethodCreat
 	}{}
 
 	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathPaymentMethodQRIS, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}
+
+// PaymentMethodVA return response from Get a Payment Method API for virtual_bank_accounts type.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-payment-method
+func (c *Client) PaymentMethodVA(ctx context.Context, paymentMethodId string) (*PaymentMethodVA, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathShowPaymentMethodVA, ":paymentMethodId", paymentMethodId)
+	res := struct {
+		Data PaymentMethodVA `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, url, nil, nil, nil, &res); err != nil {
 		return nil, err
 	}
 
