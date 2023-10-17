@@ -92,3 +92,19 @@ func (c *Client) PaymentMethodQRIS(ctx context.Context, paymentMethodId string) 
 
 	return &res.Data, nil
 }
+
+// ListPaymentsVA return response from Get a List of Payments for a Payment Method API (virtual_bank_accounts)
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-payment-method-payments
+func (c *Client) ListPaymentsVA(ctx context.Context, paymentMethodId string, params fazz.FazzParams) ([]ListPaymentVA, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathListPaymentsVA, ":paymentMethodId", paymentMethodId)
+	res := struct {
+		Data []ListPaymentVA `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, url, params, nil, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return res.Data, nil
+}
