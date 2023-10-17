@@ -108,3 +108,19 @@ func (c *Client) ListPaymentsVA(ctx context.Context, paymentMethodId string, par
 
 	return res.Data, nil
 }
+
+// ListPaymentsQRIS return response from Get a List of Payments for a Payment Method API (QRIS)
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-payment-method-payments
+func (c *Client) ListPaymentsQRIS(ctx context.Context, paymentMethodId string, params fazz.FazzParams) ([]ListPaymentQRIS, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathListPaymentsQRIS, ":paymentMethodId", paymentMethodId)
+	res := struct {
+		Data []ListPaymentQRIS `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, url, params, nil, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return res.Data, nil
+}
