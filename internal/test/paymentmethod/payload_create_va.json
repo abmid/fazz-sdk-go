@@ -1,0 +1,10 @@
+{
+  "data": {
+    "attributes": {
+      "referenceId": "customer_id_123456",
+      "bankShortCode": "BRI",
+      "displayName": "My Company Name",
+      "suffixNo": "12345678"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "data": {
+    "type": "task",
+    "attributes": {
+      "targetId": "qr_f0d07206381b2c69a52647",
+      "targetType": "qris",
+      "action": "receive_payment",
+      "options": {
+        "amount": "99000"
+      }
+    }
+  }
+}

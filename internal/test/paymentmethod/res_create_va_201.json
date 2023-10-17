@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "va_3148fe52bb6d17e4d90a6d0e55d08fb6",
+    "type": "virtual_bank_account",
+    "attributes": {
+      "referenceId": "customer_id_123456",
+      "instructions": {
+        "bankShortCode": "BRI",
+        "accountNo": "1269611512345678",
+        "displayName": "IKN-My Company Name"
+      }
+    }
+  }
+}

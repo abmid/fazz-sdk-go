@@ -1,0 +1,14 @@
+{
+  "data": {
+    "type": "task",
+    "attributes": {
+      "targetId": "va_3148fe52bb6d17e4d90a6d0e55d08fb6",
+      "targetType": "virtual_bank_account",
+      "referenceId": "external_id_55c17f9ab4",
+      "action": "receive_payment",
+      "options": {
+        "amount": "99000"
+      }
+    }
+  }
+}

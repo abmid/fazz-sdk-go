@@ -1,0 +1,26 @@
+{
+  "data": [{
+      "id": "contract_ba18fa4c8a0f4bdea9a6b582bb343cd3",
+      "type": "payment",
+      "attributes": {
+        "status": "completed",
+        "amount": "99000.2",
+        "createdAt": "2023-10-16T15:52:15+07:00",
+        "description": null,
+        "expiredAt": null,
+        "referenceId": "external_id_aae726a9b7",
+        "fees": "3663.0",
+        "paymentMethod": {
+          "id": "va_3148fe52bb6d17e4d90a6d0e55d08fb6",
+          "type": "virtual_bank_account",
+          "referenceId": "customer_id_123456",
+          "instructions": {
+            "bankShortCode": "BRI",
+            "accountNo": "1269611512345678",
+            "displayName": "IKN-My Company Name"
+          }
+        }
+      }
+    }
+  ]
+}

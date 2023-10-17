@@ -1,0 +1,13 @@
+{
+  "data": {
+    "id": "qr_f0d07206381b2c69a52647",
+    "type": "qris",
+    "attributes": {
+      "referenceId": "order_123",
+      "instructions": {
+        "imageUrl": "https://devel.bebasbayar.com/qrgen/payment/image/full/static?sc_id=170041&bill_number=8222",
+        "displayName": "Your preferred name"
+      }
+    }
+  }
+}
