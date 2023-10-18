@@ -8,6 +8,7 @@ package paymentlink
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/abmid/fazz-sdk-go"
 	"github.com/abmid/fazz-sdk-go/request"
@@ -33,6 +34,22 @@ func (c *Client) Create(ctx context.Context, payload fazz.PaymentLinkCreatePaylo
 	}{}
 
 	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathPaymentLink, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}
+
+// PaymentLink return response from Get a Payment Link API.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-payment-link
+func (c *Client) PaymentLink(ctx context.Context, paymentLinkId string) (*PaymentLink, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathShow, ":paymentLinkId", paymentLinkId)
+	res := struct {
+		Data PaymentLink `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, url, nil, nil, nil, &res); err != nil {
 		return nil, err
 	}
 
