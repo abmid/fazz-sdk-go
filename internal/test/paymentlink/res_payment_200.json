@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": "paymentlink_fca0bdbfa8cf663f50a53199e0a4c5c7",
+    "type": "payment_links",
+    "attributes": {
+      "status": "pending",
+      "amount": "15000.0",
+      "referenceId": "ref_123",
+      "createdAt": "2023-10-18 00:57:45 +0700",
+      "description": "Order Number 0001",
+      "expiredAt": "2023-12-06 16:00:00 +0700",
+      "paymentLinkUrl": "1",
+      "customerName": "John Doe",
+      "customerEmail": "john.doe@gmail.com",
+      "customerPhoneNumber": "080000000000",
+      "displayName": "Nama Tampilan"
+    }
+  }
+}

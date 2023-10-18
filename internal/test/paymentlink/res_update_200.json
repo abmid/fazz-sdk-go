@@ -1,0 +1,10 @@
+{
+  "data": {
+    "type": "task",
+    "attributes": {
+      "targetId": "paymentlink_5362392f1ce3c7dc21ad170acf8f1a09",
+      "targetType": "payment_links",
+      "action": "cancel"
+    }
+  }
+}
