@@ -74,3 +74,20 @@ func (c *Client) CreateQRIS(ctx context.Context, payload fazz.PaymentCreateQRISP
 
 	return &res.Data, nil
 }
+
+// CreateEwallet return response from Create a Payment for E-Wallet type.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/create-payment
+func (c *Client) CreateEwallet(ctx context.Context, payload fazz.PaymentCreateEwalletPayload) (*PaymentCreate, *fazz.Error) {
+	res := struct {
+		Data PaymentCreate `json:""`
+	}{}
+
+	payload.PaymentMethodType = "e-wallet"
+
+	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathPayment, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}
