@@ -40,3 +40,20 @@ func (c *Client) CreateRetailOutlet(ctx context.Context, payload fazz.PaymentCre
 
 	return &res.Data, nil
 }
+
+// CreateVA return response from Create a Payment for Virtual Account type.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/create-payment
+func (c *Client) CreateVA(ctx context.Context, payload fazz.PaymentCreateVAPayload) (*PaymentCreate, *fazz.Error) {
+	res := struct {
+		Data PaymentCreate `json:""`
+	}{}
+
+	payload.PaymentMethodType = "virtual_bank_account"
+
+	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathPayment, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}

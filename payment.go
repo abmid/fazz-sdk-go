@@ -28,7 +28,7 @@ type PaymentRetailOptions struct {
 }
 
 // PaymentCreateVAPayload represent for request payload Create a Payment (Virtual Account)
-type PaymenCreateVAPayload struct {
+type PaymentCreateVAPayload struct {
 	Payment
 	PaymentMethodOptions PaymentVAOptions `json:"paymentMethodOptions"`
 }
