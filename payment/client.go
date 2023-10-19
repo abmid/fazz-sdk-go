@@ -57,3 +57,20 @@ func (c *Client) CreateVA(ctx context.Context, payload fazz.PaymentCreateVAPaylo
 
 	return &res.Data, nil
 }
+
+// CreateQRIS return response from Create a Payment for QRIS type.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/create-payment
+func (c *Client) CreateQRIS(ctx context.Context, payload fazz.PaymentCreateQRISPayload) (*PaymentCreate, *fazz.Error) {
+	res := struct {
+		Data PaymentCreate `json:""`
+	}{}
+
+	payload.PaymentMethodType = "qris"
+
+	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathPayment, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}

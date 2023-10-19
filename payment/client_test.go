@@ -255,3 +255,117 @@ func TestClient_CreateVA(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_CreateQRIS(t *testing.T) {
+	testWrap := helper.NewTestWrapper(t)
+	defer testWrap.Ctrl.Finish()
+
+	type args struct {
+		ctx     context.Context
+		payload fazz.PaymentCreateQRISPayload
+	}
+	tests := []struct {
+		name    string
+		args    args
+		prepare func(m helper.Mocks, args args)
+		wantRes *PaymentCreate
+		wantErr *fazz.Error
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx: context.Background(),
+				payload: fazz.PaymentCreateQRISPayload{
+					Payment: fazz.Payment{
+						Amount:      15000,
+						ReferenceId: "ORDER_0003",
+						ExpiredAt:   "2023-10-19T01:07:04+07:00",
+						Description: "Order Number 0001",
+					},
+					PaymentMethodOptions: fazz.PaymentQRISOptions{
+						DisplayName: "Your preferred name",
+					},
+				},
+			},
+			prepare: func(m helper.Mocks, args args) {
+				args.payload.PaymentMethodType = "qris"
+
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodPost, fazz.SandboxURL+pathPayment, nil, args.payload, nil, gomock.Any()).
+					DoAndReturn(func(ctx context.Context, method string, url string, param any, body any, header map[string]string, response any) *fazz.Error {
+						if err := json.Unmarshal(testWrap.ResJSONByte(pathTest+"res_create_qris_201.json"), response); err != nil {
+							panic(err)
+						}
+
+						return nil
+					})
+			},
+			wantRes: &PaymentCreate{
+				ID:   "contract_0ed566e83f864e7ba6086033dfe3791c",
+				Type: "payment",
+				Attributes: PaymentAttributes{
+					Status:      "pending",
+					Amount:      "15000.0",
+					CreatedAt:   "2023-10-19T00:01:01+07:00",
+					Description: "Order Number 0001",
+					ExpiredAt:   "2023-10-19T01:07:04+07:00",
+					ReferenceId: "ORDER_0003",
+					Fees:        "116.55",
+					PaymentMethod: PaymentMethod{
+						ID:          "qr_acbe2c3cd932fd41f1caab",
+						Type:        "qris",
+						ReferenceId: "ORDER_0003",
+						Instructions: Instructions{
+							ImageUrl:    "https://devel.bebasbayar.com/qrgen/payment/image/full/static?sc_id=170041&bill_number=8222",
+							DisplayName: "Your preferred name",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Invalid requests",
+			args: args{
+				ctx: context.Background(),
+			},
+			prepare: func(m helper.Mocks, args args) {
+				args.payload.PaymentMethodType = "qris"
+
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodPost, fazz.SandboxURL+pathPayment, nil, args.payload, nil, gomock.Any()).
+					Return(fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")))
+			},
+			wantErr: fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			apiMock := mock_request.NewMockApi(testWrap.Ctrl)
+
+			c := &Client{
+				Api:     apiMock,
+				FazzURL: fazz.SandboxURL,
+			}
+
+			tt.prepare(helper.Mocks{Api: apiMock}, tt.args)
+
+			if tt.wantRes != nil {
+				payload := fazz.PaymentCreateQRISPayload{}
+				tt.args.payload.PaymentMethodType = "qris"
+
+				if !testWrap.DeepEqualPayload(pathTest+"payload_create_qris.json", &payload, &tt.args.payload) {
+					t.Errorf("Client.CreateQRIS() gotPayload = %v, wantPayload %v", payload, tt.args.payload)
+				}
+			}
+
+			gotRes, gotErr := c.CreateQRIS(tt.args.ctx, tt.args.payload)
+			if !reflect.DeepEqual(gotRes, tt.wantRes) {
+				t.Errorf("Client.CreateQRIS() gotRes = %v, wantRes %v", gotRes, tt.wantRes)
+			}
+
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("Client.CreateQRIS() gotErr = %v, wantRes %v", gotErr, tt.wantErr)
+			}
+		})
+	}
+}
