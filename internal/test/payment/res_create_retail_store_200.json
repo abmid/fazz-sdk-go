@@ -1,0 +1,25 @@
+{
+  "data": {
+    "id": "contract_b31655f4827845c9809214bf0fc1f1ab",
+    "type": "payment",
+    "attributes": {
+      "status": "pending",
+      "amount": "15000.0",
+      "createdAt": "2023-10-18T23:57:48+07:00",
+      "description": "Order Number 0001",
+      "expiredAt": "2023-10-19T01:07:04+07:00",
+      "referenceId": "ORDER_0001",
+      "fees": "4440.0",
+      "paymentMethod": {
+        "id": "mst_XXruOhVf8PjHeaw2SLsd",
+        "type": "retail_outlet",
+        "referenceId": "ORDER_0001",
+        "instructions": {
+          "retailOutletName": "ALFAMART",
+          "paymentCode": "81879760",
+          "displayName": "Nama Tampilan"
+        }
+      }
+    }
+  }
+}

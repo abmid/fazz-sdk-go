@@ -1,0 +1,15 @@
+{
+  "data": {
+    "attributes": {
+      "paymentMethodType": "retail_outlet",
+      "amount": 15000,
+      "referenceId": "ORDER_0001",
+      "expiredAt": "2023-10-19T01:07:04+07:00",
+      "description": "Order Number 0001",
+      "paymentMethodOptions": {
+        "retailOutletName": "ALFAMART",
+        "displayName": "Nama Tampilan"
+      }
+    }
+  }
+}

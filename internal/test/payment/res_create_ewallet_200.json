@@ -1,0 +1,25 @@
+{
+  "data": {
+    "id": "contract_b174839e7ddf4d8eb826df7bb3d08a55",
+    "type": "payment",
+    "attributes": {
+      "status": "pending",
+      "amount": "15000.0",
+      "createdAt": "2023-10-19T00:02:32+07:00",
+      "description": "Order Number 0001",
+      "expiredAt": "2023-10-19T00:20:04+07:00",
+      "referenceId": "ORDER_0004",
+      "fees": "249.75",
+      "paymentMethod": {
+        "id": "shopeepay_6fcf2d462f3837dcbe1fe1f82e92e4a78f6cbb8e",
+        "type": "e-wallet",
+        "referenceId": "ORDER_0004",
+        "settlement": {
+          "httpUrl": "https://pay.uat.airpay.co.id/h5pay/pay?type=start&medium_index=dFhkbmR1bTBIamhW0VqULhun6fTSt7wAUTLjlGQIEcUvLx3kpjdBTcaEg3NqoJZxo1dRWshDlOl_-VNZA6TNWcFz9UC89QsV9VNdZisX&order_key=QvcorKPvdeluA8iQWsWba93giTvjQeGASbsTpbd3ofib15cwunSk1_K2zp_kApjEoD2uvhTOU_IIdQ&source=web&token=dFhkbmR1bTBIamhW0VqULhun6fTSt7wAUTLjlGQIEcUvLx3kpjdBTcaEg3NqoJZxo1dRWshDlOl_-VNZA6TNWcFz9UC89QsV9VNdZisX",
+          "afterSettlementUrl": "https://pay.examplessee.co.id/return-pay-here?0340450",
+          "mobileUrl": "shopeeid://main?apprl=%2Frn%2FTRANSFER_PAGE%3Fnavigate_url%3Dhttps%253A%252F%252Fwsa.uat.wallet.airpay.co.id%252Fwallet%252Fpay%253Fmedium_index%253DdFhkbmR1bTBIamhW0VqULhun6fTSt7wAUTLjlGQIEcUvLx3kpjdBTcaEg3NqoJZxo1dRWshDlOl_-VNZA6TNWcFz9UC89QsV9VNdZisX%2526order_key%253DQvcorKPvdeluA8iQWsWba93giTvjQeGASbsTpbd3ofib15cwunSk1_K2zp_kApjEoD2uvhTOU_IIdQ%2526source%253Dqr%2526token%253DdFhkbmR1bTBIamhW0VqULhun6fTSt7wAUTLjlGQIEcUvLx3kpjdBTcaEg3NqoJZxo1dRWshDlOl_-VNZA6TNWcFz9UC89QsV9VNdZisX"
+        }
+      }
+    }
+  }
+}

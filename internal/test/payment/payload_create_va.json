@@ -1,0 +1,16 @@
+{
+  "data": {
+    "attributes": {
+      "paymentMethodType": "virtual_bank_account",
+      "amount": 15000,
+      "referenceId": "ORDER_0002",
+      "expiredAt": "2023-10-19T01:07:04+07:00",
+      "description": "Order Number 0001",
+      "paymentMethodOptions": {
+        "bankShortCode": "BCA",
+        "displayName": "test name",
+        "suffixNo": "12345678"
+      }
+    }
+  }
+}

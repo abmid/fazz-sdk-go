@@ -1,0 +1,15 @@
+{
+  "data": {
+    "attributes": {
+      "paymentMethodType": "e-wallet",
+      "amount": 15000,
+      "referenceId": "ORDER_0004",
+      "expiredAt": "2023-10-19T00:20:04+07:00",
+      "description": "Order Number 0001",
+      "paymentMethodOptions": {
+        "providerCode": "SHOPEEPAY",
+        "afterSettlementReturnUrl": "https://pay.examplessee.co.id/return-pay-here?0340450"
+      }
+    }
+  }
+}

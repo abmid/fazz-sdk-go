@@ -1,0 +1,10 @@
+{
+  "data": {
+    "type": "task",
+    "attributes": {
+      "targetId": "contract_b174839e7ddf4d8eb826df7bb3d08a55",
+      "targetType": "payment",
+      "action": "receive_payment"
+    }
+  }
+}
