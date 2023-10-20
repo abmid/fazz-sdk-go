@@ -21,8 +21,8 @@ type Client struct {
 
 const (
 	pathPayment = "/v4/payments"
-	pathShow    = "/v1/payments/:paymentId"
-	pathUpdate  = "/v1/payments/:paymentId/tasks"
+	pathShow    = pathPayment + "/:paymentId"
+	pathUpdate  = pathPayment + "/:paymentId/tasks"
 )
 
 // CreateRetailOutlet return response from Create a Payment for Retail Outlet type.
