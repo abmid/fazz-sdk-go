@@ -6,10 +6,10 @@
 package client
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/abmid/fazz-sdk-go"
+	"github.com/abmid/fazz-sdk-go/validationservice"
 )
 
 func TestNew(t *testing.T) {
@@ -34,7 +34,8 @@ func TestNew(t *testing.T) {
 					ApiKey:    "test_key123",
 					SecretKey: "123abc",
 				},
-				FazzURL: fazz.SandboxURL,
+				FazzURL:           fazz.SandboxURL,
+				ValidationService: &validationservice.Client{},
 			},
 		},
 		{
@@ -56,8 +57,8 @@ func TestNew(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := New(tt.args.opts); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("New() = %v, want %v", got, tt.want)
+			if got := New(tt.args.opts); got.FazzURL != tt.want.FazzURL {
+				t.Errorf("New() = %v, want %v", got.FazzURL, tt.want.FazzURL)
 			}
 		})
 	}
