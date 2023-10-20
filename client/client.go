@@ -9,6 +9,12 @@ import (
 	"strings"
 
 	"github.com/abmid/fazz-sdk-go"
+	"github.com/abmid/fazz-sdk-go/account"
+	"github.com/abmid/fazz-sdk-go/disbursement"
+	"github.com/abmid/fazz-sdk-go/payment"
+	"github.com/abmid/fazz-sdk-go/paymentlink"
+	"github.com/abmid/fazz-sdk-go/paymentmethod"
+	"github.com/abmid/fazz-sdk-go/request"
 	"github.com/abmid/fazz-sdk-go/validationservice"
 )
 
@@ -16,6 +22,11 @@ type Client struct {
 	Opts              Options
 	FazzURL           string
 	ValidationService *validationservice.Client
+	Account           *account.Client
+	Disbursement      *disbursement.Client
+	Payment           *payment.Client
+	PaymentLink       *paymentlink.Client
+	PaymentMethod     *paymentmethod.Client
 }
 
 type Options struct {
@@ -24,7 +35,13 @@ type Options struct {
 }
 
 func (c *Client) Init() {
-
+	requestApi := request.NewAPI(c.Opts.ApiKey, c.Opts.SecretKey)
+	c.ValidationService = &validationservice.Client{Api: requestApi, FazzURL: c.FazzURL}
+	c.Account = &account.Client{Api: requestApi, FazzURL: c.FazzURL}
+	c.Disbursement = &disbursement.Client{Api: requestApi, FazzURL: c.FazzURL}
+	c.Payment = &payment.Client{Api: requestApi, FazzURL: c.FazzURL}
+	c.PaymentLink = &paymentlink.Client{Api: requestApi, FazzURL: c.FazzURL}
+	c.PaymentMethod = &paymentmethod.Client{Api: requestApi, FazzURL: c.FazzURL}
 }
 
 func New(opts Options) *Client {
@@ -41,6 +58,8 @@ func New(opts Options) *Client {
 		Opts:    opts,
 		FazzURL: fazzURL,
 	}
+
+	c.Init()
 
 	return &c
 }
