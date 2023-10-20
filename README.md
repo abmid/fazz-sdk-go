@@ -18,7 +18,7 @@
 
 🚧 *The SDK is currently undergoing heavy development with frequent changes, because of this please get the latest update of the SDK* 🚧
 
-> Compatibility: The SDK has been developing use documentation Indonesia Payment API with API version 4.
+> Compatibility: The SDK has been developed using Indonesia Payment API version 4 and currently does not support Singapore Payments.
 
 [Fazz](https://fazz.com/) previously Xfers, is a company that provides financial services in Southeast Asia such as sending and receiving payments, grow their capital, and get funding.
 
