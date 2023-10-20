@@ -9,15 +9,15 @@ package fazz
 
 // PaymentMethodCreateVAPayload represent request payload for Create Payment Method type Virtual Account API.
 type PaymentMethodCreateVAPayload struct {
-	ReferenceID   string `json:"referenceId"`
-	BankShortCode string `json:"bankShortCode"`
-	DisplayName   string `json:"displayName"`
-	SuffixNo      string `json:"suffixNo"`
+	ReferenceID   string `json:"referenceId"`   // Required
+	BankShortCode string `json:"bankShortCode"` // Required
+	DisplayName   string `json:"displayName"`   // Required
+	SuffixNo      string `json:"suffixNo,omitempty"`
 }
 
 // PaymentMethodCreateQRISPayload represent request payload for Create Payment Method type QRIS API.
 type PaymentMethodCreateQRISPayload struct {
-	ReferenceID string `json:"referenceID"`
+	ReferenceID string `json:"referenceID"` // Required
 	DisplayName string `json:"displayName"`
 }
 
