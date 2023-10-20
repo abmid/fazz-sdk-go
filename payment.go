@@ -8,11 +8,11 @@ package fazz
 // ========== Payloads ==========
 
 type Payment struct {
-	PaymentMethodType string `json:"paymentMethodType"`
-	Amount            uint32 `json:"amount"`
-	ReferenceId       string `json:"referenceId"`
-	ExpiredAt         string `json:"expiredAt"`
-	Description       string `json:"description"`
+	PaymentMethodType string `json:"paymentMethodType"` // Required
+	Amount            uint32 `json:"amount"`            // Required
+	ReferenceId       string `json:"referenceId"`       // Required
+	ExpiredAt         string `json:"expiredAt,omitempty"`
+	Description       string `json:"description,omitempty"`
 }
 
 // PaymentCreateRetailPayload represent for request payload Create a Payment (Retail Outlet)
@@ -37,7 +37,7 @@ type PaymentCreateVAPayload struct {
 type PaymentVAOptions struct {
 	BankShortCode string `json:"bankShortCode"`
 	DisplayName   string `json:"displayName"`
-	SuffixNo      string `json:"suffixNo"`
+	SuffixNo      string `json:"suffixNo,omitempty"`
 }
 
 // PaymentCreateQRISPayload represent for request payload Create a Payment (QRIS)
