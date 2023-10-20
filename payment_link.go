@@ -14,14 +14,14 @@ type PaymentLinkCreatePayload struct {
 	CustomerName         string             `json:"customerName"`        // Required
 	CustomerEmail        string             `json:"customerEmail"`       // Required
 	CustomerPhoneNumber  string             `json:"customerPhoneNumber"` // Required
-	Description          string             `json:"description"`
-	ExpiredAt            string             `json:"expiredAt"` // ISO601
+	Description          string             `json:"description"`         // Required
+	ExpiredAt            string             `json:"expiredAt,omitempty"` // ISO601
 	PaymentMethodOptions PaymentLinkOptions `json:"paymentMethodOptions"`
 }
 
 // PaymentLinkOptions is part of PaymentLinkCreatePayload
 type PaymentLinkOptions struct {
-	DisplayName string `json:"displayName"`
+	DisplayName string `json:"displayName,omitempty"`
 }
 
 // PaymetLinkUpdatePayload represent request payload for Update a Payment Link API.
