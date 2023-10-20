@@ -123,3 +123,19 @@ func (c *Client) Payments(ctx context.Context, params fazz.FazzParams) ([]Paymen
 
 	return res.Data, nil
 }
+
+// Update return response from Update a Payment API.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/update-payment
+func (c *Client) Update(ctx context.Context, paymentId string, payload fazz.PaymentUpdatePayload) (*PaymentUpdate, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathUpdate, ":paymentId", paymentId)
+	res := struct {
+		Data PaymentUpdate `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodPost, url, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}

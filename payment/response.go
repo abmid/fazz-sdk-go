@@ -57,3 +57,16 @@ type PaymentCreate struct {
 	Type       string            `json:"type"`
 	Attributes PaymentAttributes `json:"attributes"`
 }
+
+// PaymentUpdate represent response from Update a Payment API.
+type PaymentUpdate struct {
+	Type       string                  `json:"type"`
+	Attributes PaymentUpdateAttributes `json:"attributes"`
+}
+
+// PaymentUpdateAttributes is part of PaymentUpdate
+type PaymentUpdateAttributes struct {
+	TargetId   string `json:"targetId"`
+	TargetType string `json:"targetType"`
+	Action     string `json:"action"`
+}

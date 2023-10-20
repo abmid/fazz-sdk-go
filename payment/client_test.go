@@ -696,3 +696,93 @@ func TestClient_Payments(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_Update(t *testing.T) {
+	testWrap := helper.NewTestWrapper(t)
+	defer testWrap.Ctrl.Finish()
+
+	type args struct {
+		ctx       context.Context
+		paymentId string
+		payload   fazz.PaymentUpdatePayload
+	}
+	tests := []struct {
+		name    string
+		args    args
+		prepare func(m helper.Mocks, args args)
+		wantRes *PaymentUpdate
+		wantErr *fazz.Error
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx:       context.Background(),
+				paymentId: "contract_b174839e7ddf4d8eb826df7bb3d08a55",
+				payload: fazz.PaymentUpdatePayload{
+					Action: "receive_payment",
+				},
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathUpdate, ":paymentId", args.paymentId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodPost, url, nil, args.payload, nil, gomock.Any()).
+					DoAndReturn(func(ctx context.Context, method string, url string, param any, body any, header map[string]string, response any) *fazz.Error {
+						if err := json.Unmarshal(testWrap.ResJSONByte(pathTest+"res_update_201.json"), response); err != nil {
+							panic(err)
+						}
+
+						return nil
+					})
+			},
+			wantRes: &PaymentUpdate{
+				Type: "task",
+				Attributes: PaymentUpdateAttributes{
+					TargetId:   "contract_b174839e7ddf4d8eb826df7bb3d08a55",
+					TargetType: "payment",
+					Action:     "receive_payment",
+				},
+			},
+		},
+		{
+			name: "Invalid requests",
+			args: args{
+				ctx: context.Background(),
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathUpdate, ":paymentId", args.paymentId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodPost, url, nil, args.payload, nil, gomock.Any()).
+					Return(fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")))
+			},
+			wantErr: fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			apiMock := mock_request.NewMockApi(testWrap.Ctrl)
+
+			c := &Client{
+				Api:     apiMock,
+				FazzURL: fazz.SandboxURL,
+			}
+
+			tt.prepare(helper.Mocks{Api: apiMock}, tt.args)
+
+			if tt.wantRes != nil {
+				payload := fazz.PaymentUpdatePayload{}
+
+				if !testWrap.DeepEqualPayload(pathTest+"payload_update.json", &payload, &tt.args.payload) {
+					t.Errorf("Client.Update() gotPayload = %v, wantPayload %v", payload, tt.args.payload)
+				}
+			}
+
+			gotRes, gotERr := c.Update(tt.args.ctx, tt.args.paymentId, tt.args.payload)
+			if !reflect.DeepEqual(gotRes, tt.wantRes) {
+				t.Errorf("Client.Update() gotRes = %v, wantRes %v", gotRes, tt.wantRes)
+			}
+			if !reflect.DeepEqual(gotERr, tt.wantErr) {
+				t.Errorf("Client.Update() gotERr = %v, wantErr %v", gotERr, tt.wantErr)
+			}
+		})
+	}
+}
