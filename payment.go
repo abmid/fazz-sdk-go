@@ -7,6 +7,7 @@ package fazz
 
 // ========== Payloads ==========
 
+// Payment is general payload for create a payment like retail outlet, va, qris and e-wallet.
 type Payment struct {
 	PaymentMethodType string `json:"paymentMethodType"` // Required
 	Amount            uint32 `json:"amount"`            // Required
@@ -46,12 +47,12 @@ type PaymentCreateQRISPayload struct {
 	PaymentMethodOptions PaymentQRISOptions `json:"paymentMethodOptions"`
 }
 
-// PaymentQRISOptoiins is part of PaymentCreateQRISPayload
+// PaymentQRISOptions is part of PaymentCreateQRISPayload
 type PaymentQRISOptions struct {
 	DisplayName string `json:"displayName"`
 }
 
-// PaymentCreateQRISPayload represent for request payload Create a Payment (E-Wallet)
+// PaymentCreateEwalletPayload represent for request payload Create a Payment (E-Wallet)
 type PaymentCreateEwalletPayload struct {
 	Payment
 	PaymentMethodOptions PaymentEwalletOptions `json:"paymentMethodOptions"`
