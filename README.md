@@ -16,9 +16,13 @@
 
 ## Overview
 
-🚧 *The SDK is currently undergoing heavy development with frequent changes, because of this please get the latest update SDK* 🚧
+🚧 *The SDK is currently undergoing heavy development with frequent changes, because of this please get the latest update of the SDK* 🚧
+
+> Compatibility: The SDK has been developing use documentation Indonesia Payment API with API version 4.
 
 [Fazz](https://fazz.com/) previously Xfers, is a company that provides financial services in Southeast Asia such as sending and receiving payments, grow their capital, and get funding.
+
+Fazz provides SDKs in several programming languages but not in Go. Because of this the SDK was created.
 
 For more information, visit the [Fazz Payments API Official documentation](https://docs.fazz.com/v4-ID/docs).
 
@@ -31,6 +35,62 @@ go get -u github.com/abmid/fazz-sdk-go
 ```
 
 ## Documentation
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/abmid/fazz-sdk-go"
+	"github.com/abmid/fazz-sdk-go/client"
+)
+
+func main() {
+	c := client.New(client.Options{ApiKey: "test_apikey", SecretKey: "secretkey"})
+
+	payload := fazz.ValidateBankAccountPayload{
+		AccountNo:     "000501003219303",
+		BankShortCode: "BRI",
+	}
+
+	res, err := c.ValidationService.BankAccount(context.Background(), payload)
+	if err != nil {
+		// Handle case error
+	}
+
+	fmt.Println(res)
+}
+
+```
+
+**Example Create Payment for Virtual Account**
+
+```go
+	// ========== Example Create VA ==========
+	payload := fazz.PaymentCreateVAPayload{
+		Payment: fazz.Payment{
+			Amount:      15000,
+			ReferenceId: "SDK_TEST_01",
+			ExpiredAt:   time.Now().Add(70 * time.Minute).Format(time.RFC3339),
+			Description: "SDK desc",
+		},
+		PaymentMethodOptions: fazz.PaymentVAOptions{
+			BankShortCode: "BCA",
+			DisplayName:   "GOOD Man",
+			SuffixNo:      "123456",
+		},
+	}
+	res, err := c.Payment.CreateVA(context.Background(), payload)
+	if err != nil {
+		// handle case error
+		fmt.Println(err)
+	}
+
+	fmt.Println(res)
+```
+
 
 
 For more examples, please check directory [example](https://github.com/abmid/fazz-sdk-go/tree/master/example) and [Godoc](https://godoc.org/github.com/abmid/fazz-sdk-go)
