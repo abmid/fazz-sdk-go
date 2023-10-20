@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/abmid/fazz-sdk-go"
@@ -481,6 +482,99 @@ func TestClient_CreateEwallet(t *testing.T) {
 
 			if !reflect.DeepEqual(gotErr, tt.wantErr) {
 				t.Errorf("Client.CreateEwallet() gotErr = %v, wantRes %v", gotErr, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestClient_Payment(t *testing.T) {
+	testWrap := helper.NewTestWrapper(t)
+	defer testWrap.Ctrl.Finish()
+
+	type args struct {
+		ctx       context.Context
+		paymentId string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		prepare func(m helper.Mocks, args args)
+		wantRes *Payment
+		wantErr *fazz.Error
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx:       context.Background(),
+				paymentId: "contract_0ed566e83f864e7ba6086033dfe3791c",
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathShow, ":paymentId", args.paymentId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodGet, url, nil, nil, nil, gomock.Any()).
+					DoAndReturn(func(ctx context.Context, method string, url string, param any, body any, header map[string]string, response any) *fazz.Error {
+						if err := json.Unmarshal(testWrap.ResJSONByte(pathTest+"res_payment_qris_200.json"), response); err != nil {
+							panic(err)
+						}
+
+						return nil
+					})
+			},
+			wantRes: &Payment{
+				ID:   "contract_0ed566e83f864e7ba6086033dfe3791c",
+				Type: "payment",
+				Attribute: PaymentAttributes{
+					Status:      "pending",
+					Amount:      "15000.0",
+					CreatedAt:   "2023-10-19T00:01:01+07:00",
+					Description: "Order Number 0001",
+					ExpiredAt:   "2023-10-19T01:07:04+07:00",
+					ReferenceId: "ORDER_0003",
+					Fees:        "116.55",
+					PaymentMethod: PaymentMethod{
+						ID:          "qr_acbe2c3cd932fd41f1caab",
+						Type:        "qris",
+						ReferenceId: "ORDER_0003",
+						Instructions: Instructions{
+							ImageUrl:    "https://devel.bebasbayar.com/qrgen/payment/image/full/static?sc_id=170041&bill_number=8222",
+							DisplayName: "Your preferred name",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "Invalid requests",
+			args: args{
+				ctx:       context.Background(),
+				paymentId: "contract_0ed566e83f864e7ba6086033dfe3791c",
+			},
+			prepare: func(m helper.Mocks, args args) {
+				url := strings.ReplaceAll(fazz.SandboxURL+pathShow, ":paymentId", args.paymentId)
+				m.Api.EXPECT().
+					Req(args.ctx, http.MethodGet, url, nil, nil, nil, gomock.Any()).
+					Return(fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")))
+			},
+			wantErr: fazz.ErrFromAPI(400, testWrap.ResJSONByte(pathTestInvalid+"res_400.json")),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			apiMock := mock_request.NewMockApi(testWrap.Ctrl)
+
+			c := &Client{
+				Api:     apiMock,
+				FazzURL: fazz.SandboxURL,
+			}
+
+			tt.prepare(helper.Mocks{Api: apiMock}, tt.args)
+
+			gotRes, gotErr := c.Payment(tt.args.ctx, tt.args.paymentId)
+			if !reflect.DeepEqual(gotRes, tt.wantRes) {
+				t.Errorf("Client.Payment() gotRes = %v, wantRes %v", gotRes, tt.wantRes)
+			}
+			if !reflect.DeepEqual(gotErr, tt.wantErr) {
+				t.Errorf("Client.Payment() gotErr = %v, wantErr %v", gotErr, tt.wantErr)
 			}
 		})
 	}

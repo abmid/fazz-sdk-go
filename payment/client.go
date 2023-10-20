@@ -8,6 +8,7 @@ package payment
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/abmid/fazz-sdk-go"
 	"github.com/abmid/fazz-sdk-go/request"
@@ -86,6 +87,22 @@ func (c *Client) CreateEwallet(ctx context.Context, payload fazz.PaymentCreateEw
 	payload.PaymentMethodType = "e-wallet"
 
 	if err := c.Api.Req(ctx, http.MethodPost, c.FazzURL+pathPayment, nil, payload, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return &res.Data, nil
+}
+
+// Payment return response from Get a Payment API.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-a-payment
+func (c *Client) Payment(ctx context.Context, paymentId string) (*Payment, *fazz.Error) {
+	url := strings.ReplaceAll(c.FazzURL+pathShow, ":paymentId", paymentId)
+	res := struct {
+		Data Payment `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, url, nil, nil, nil, &res); err != nil {
 		return nil, err
 	}
 
