@@ -43,3 +43,57 @@ func PaymentMethodCreate() {
 
 	fmt.Println(resVA)
 }
+
+func PaymentMethodShow() {
+	c := client.New(client.Options{ApiKey: "test_key", SecretKey: "secretKey"})
+
+	// ========== Example Show QRIS ==========
+	res, err := c.PaymentMethod.PaymentMethodQRIS(context.Background(), "123")
+	if err != nil {
+		// Handle case error
+	}
+
+	fmt.Println(res)
+
+	// ========== Example Show VA ==========
+	resVA, err := c.PaymentMethod.PaymentMethodVA(context.Background(), "321")
+	if err != nil {
+		// Handle case error
+	}
+
+	fmt.Println(resVA)
+}
+
+func PaymentMethodGetListPayments() {
+	c := client.New(client.Options{ApiKey: "test_key", SecretKey: "secretKey"})
+
+	// ========== Example get list payments for virtual account type ==========
+	params := fazz.FazzParams{
+		PageSize: 20,
+	}
+	res, err := c.PaymentMethod.ListPaymentsVA(context.Background(), "123", params)
+	if err != nil {
+		// Handle case error
+	}
+
+	fmt.Println(res)
+
+	// for QRIS use c.PaymentMethod.ListPaymentsQRIS()
+}
+
+func PaymentMethodSimulatePayment() {
+	c := client.New(client.Options{ApiKey: "test_key", SecretKey: "secretKey"})
+
+	// ========== Example simulate payment for QRIS ==========
+	payload := fazz.PaymentMethodSimulatePayload{
+		Action: "receive_payment",
+	}
+	res, err := c.PaymentMethod.SimulatePaymentQRIS(context.Background(), "123", payload)
+	if err != nil {
+		// Handle case error
+	}
+
+	fmt.Println(res)
+
+	// for VA use c.PaymentMethod.SimulatePaymentVA()
+}
