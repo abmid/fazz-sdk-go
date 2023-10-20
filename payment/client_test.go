@@ -600,7 +600,7 @@ func TestClient_Payments(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				params: fazz.FazzParams{
-					PageNumber: helper.ToPtr[uint32](1),
+					PageNumber: 1,
 				},
 			},
 			prepare: func(m helper.Mocks, args args) {

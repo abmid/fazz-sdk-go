@@ -19,11 +19,11 @@ type FazzPayload struct {
 
 // FazzParams represent default pagination, sorting & filtering from Fazz
 type FazzParams struct {
-	PageNumber    *uint32 `url:"page[number]"`
-	PageSize      *uint32 `url:"page[size]"`
-	Sort          *string `url:"sort"`
-	CreatedAfter  *string `url:"filter[createdAfter]"`  // Time.iso8601
-	CreatedBefore *string `url:"filter[createdBefore]"` // Time.iso8601
-	Status        *string `url:"filter[status]"`
-	ReferenceID   *string `url:"filter[referenceId]"`
+	PageNumber    uint32 `url:"page[number],omitempty"`
+	PageSize      uint32 `url:"page[size],omitempty"`
+	Sort          string `url:"sort,omitempty"`
+	CreatedAfter  string `url:"filter[createdAfter],omitempty"`  // Time.iso8601
+	CreatedBefore string `url:"filter[createdBefore],omitempty"` // Time.iso8601
+	Status        string `url:"filter[status],omitempty"`
+	ReferenceID   string `url:"filter[referenceId],omitempty"`
 }
