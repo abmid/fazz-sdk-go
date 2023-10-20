@@ -17,7 +17,7 @@ type PaymentMethodCreateVAPayload struct {
 
 // PaymentMethodCreateQRISPayload represent request payload for Create Payment Method type QRIS API.
 type PaymentMethodCreateQRISPayload struct {
-	ReferenceID string `json:"referenceID"` // Required
+	ReferenceID string `json:"referenceId"` // Required
 	DisplayName string `json:"displayName"`
 }
 
