@@ -108,3 +108,18 @@ func (c *Client) Payment(ctx context.Context, paymentId string) (*Payment, *fazz
 
 	return &res.Data, nil
 }
+
+// Payment return response from Get a List of Payments API.
+//
+// Docs: https://docs.fazz.com/v4-ID/reference/get-payments
+func (c *Client) Payments(ctx context.Context, params fazz.FazzParams) ([]Payment, *fazz.Error) {
+	res := struct {
+		Data []Payment `json:"data"`
+	}{}
+
+	if err := c.Api.Req(ctx, http.MethodGet, c.FazzURL+pathPayment, params, nil, nil, &res); err != nil {
+		return nil, err
+	}
+
+	return res.Data, nil
+}
