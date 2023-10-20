@@ -391,7 +391,7 @@ func TestClient_ListPaymentsVA(t *testing.T) {
 				ctx:             context.Background(),
 				paymentMethodId: "va_3148fe52bb6d17e4d90a6d0e55d08fb6",
 				params: fazz.FazzParams{
-					CreatedAfter: time.Now().Format(time.DateTime),
+					CreatedAfter: time.Now().Format("2006-01-02 15:04:05"),
 				},
 			},
 			prepare: func(m helper.Mocks, args args) {
@@ -488,7 +488,7 @@ func TestClient_ListPaymentsQRIS(t *testing.T) {
 				ctx:             context.Background(),
 				paymentMethodId: "qr_f0d07206381b2c69a52647",
 				params: fazz.FazzParams{
-					CreatedAfter: time.Now().Format(time.DateTime),
+					CreatedAfter: time.Now().Format("2006-01-02 15:04:05"),
 				},
 			},
 			prepare: func(m helper.Mocks, args args) {
