@@ -18,6 +18,7 @@ import (
 func TestApiImplement_Req(t *testing.T) {
 	type httpParam struct {
 		AnotherParam string `url:"another_param"`
+		EmptyParam   uint32 `url:"another_again,omitempty"`
 	}
 
 	type httpResponse struct {
