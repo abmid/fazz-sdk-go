@@ -11,10 +11,7 @@ import (
 	"time"
 
 	"github.com/abmid/fazz-sdk-go"
-	"github.com/abmid/fazz-sdk-go/client"
 )
-
-var c = client.New(client.Options{ApiKey: "test_x", SecretKey: "secretkey"})
 
 func PaymentLinkCreate() {
 	payload := fazz.PaymentLinkCreatePayload{
