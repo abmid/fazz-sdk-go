@@ -1,4 +1,4 @@
-# DurianPay SDK for Go #
+# Fazz / Xfers SDK for Go #
 
 [![GoDoc](https://godoc.org/github.com/abmid/fazz-sdk-go?status.svg)](https://godoc.org/github.com/abmid/fazz-sdk-go)
 ![Test Status](https://github.com/abmid/fazz-sdk-go/actions/workflows/test.yml/badge.svg)
