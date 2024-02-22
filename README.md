@@ -116,7 +116,7 @@ For more examples, please check directory [example](https://github.com/abmid/faz
   - [x] Get a disbursement
   - [x] Get a list of disbursements
   - [x] Update a disbursement
-  - [ ] Get a list of banks
+  - [x] Get a list of banks
 - ACCOUNTS
   - [x] Get account balance
 - VALIDATIONS
