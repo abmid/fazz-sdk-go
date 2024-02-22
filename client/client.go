@@ -10,6 +10,7 @@ import (
 
 	"github.com/abmid/fazz-sdk-go"
 	"github.com/abmid/fazz-sdk-go/account"
+	"github.com/abmid/fazz-sdk-go/bank"
 	"github.com/abmid/fazz-sdk-go/disbursement"
 	"github.com/abmid/fazz-sdk-go/payment"
 	"github.com/abmid/fazz-sdk-go/paymentlink"
@@ -27,6 +28,7 @@ type Client struct {
 	Payment           *payment.Client
 	PaymentLink       *paymentlink.Client
 	PaymentMethod     *paymentmethod.Client
+	Bank              *bank.Client
 }
 
 type Options struct {
@@ -42,6 +44,7 @@ func (c *Client) Init() {
 	c.Payment = &payment.Client{Api: requestApi, FazzURL: c.FazzURL}
 	c.PaymentLink = &paymentlink.Client{Api: requestApi, FazzURL: c.FazzURL}
 	c.PaymentMethod = &paymentmethod.Client{Api: requestApi, FazzURL: c.FazzURL}
+	c.Bank = &bank.Client{Api: requestApi, FazzURL: c.FazzURL}
 }
 
 func New(opts Options) *Client {
