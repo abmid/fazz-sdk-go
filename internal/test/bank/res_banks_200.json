@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "bca",
+      "type": "bank",
+      "attributes": {
+        "name": "Bank Central Asia",
+        "shortCode": "BCA",
+        "swiftBic": "CENAIDJA"
+      }
+    },
+    {
+      "id": "mandiri",
+      "type": "bank",
+      "attributes": {
+        "name": "Bank Mandiri",
+        "shortCode": "MANDIRI",
+        "swiftBic": "BMRIIDJA"
+      }
+    }
+  ]
+}
